@@ -24,12 +24,23 @@ export function Transactions() {
               <tr key={transaction.id}>
                 <td width="50%">{transaction.description}</td>
                 <td>
-                  <PriceHighlight
-                    variant={transaction.type}
-                  >{`R${transaction.price}`}</PriceHighlight>
+                  <PriceHighlight variant={transaction.type}>
+                    {Intl.NumberFormat("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    }).format(transaction.price)}
+                  </PriceHighlight>
                 </td>
                 <td>{transaction.category}</td>
-                <td>{transaction.createdAt}</td>
+                <td>
+                  {Intl.DateTimeFormat("pt-BR", {
+                    day: "2-digit",
+                    month: "2-digit",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }).format(new Date(transaction.createdAt))}
+                </td>
               </tr>
             ))}
           </tbody>
