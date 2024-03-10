@@ -8,6 +8,7 @@ import {
   TransactionsTable,
 } from "./styles";
 import { TransactionsContext } from "../../contexts/TransactionsContext";
+import { currencyFormatter, dateFormatter } from "../../utils/formatter";
 
 export function Transactions() {
   const { transactions } = useContext(TransactionsContext);
@@ -25,21 +26,13 @@ export function Transactions() {
                 <td width="50%">{transaction.description}</td>
                 <td>
                   <PriceHighlight variant={transaction.type}>
-                    {Intl.NumberFormat("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    }).format(transaction.price)}
+                    {transaction.type === "outcome" && "- "}
+                    {currencyFormatter.format(transaction.price)}
                   </PriceHighlight>
                 </td>
                 <td>{transaction.category}</td>
                 <td>
-                  {Intl.DateTimeFormat("pt-BR", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }).format(new Date(transaction.createdAt))}
+                  {dateFormatter.format(new Date(transaction.createdAt))}
                 </td>
               </tr>
             ))}

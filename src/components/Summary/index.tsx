@@ -5,6 +5,7 @@ import {
   Transaction,
   TransactionsContext,
 } from "../../contexts/TransactionsContext";
+import { currencyFormatter } from "../../utils/formatter";
 
 export function Summary() {
   const { transactions } = useContext(TransactionsContext);
@@ -34,21 +35,21 @@ export function Summary() {
           <span>Entradas</span>
           <ArrowCircleUp size={32} color="#00b37e" />
         </header>
-        <strong>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(summary.income)}</strong>
+        <strong>{currencyFormatter.format(summary.income)}</strong>
       </SummaryCard>
       <SummaryCard>
         <header>
           <span>Saídas</span>
           <ArrowCircleDown size={32} color="#f75a68" />
         </header>
-        <strong>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(summary.outcome)}</strong>
+        <strong>{currencyFormatter.format(summary.outcome)}</strong>
       </SummaryCard>
       <SummaryCard variant="green">
         <header>
           <span>Total</span>
           <CurrencyDollar size={32} color="#ffffff" />
         </header>
-        <strong>{Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(summary.balance)}</strong>
+        <strong>{currencyFormatter.format(summary.balance)}</strong>
       </SummaryCard>
     </SummaryContainer>
   );
