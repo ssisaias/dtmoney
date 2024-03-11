@@ -4,7 +4,7 @@ import { createContext } from "use-context-selector";
 import { v4 as uuidv4 } from "uuid";
 
 export interface Transaction {
-  id: number;
+  id: string;
   description: string;
   type: "income" | "outcome";
   price: number;

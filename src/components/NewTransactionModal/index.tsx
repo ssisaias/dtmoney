@@ -43,6 +43,7 @@ export function NewTransactionModal({
     control,
     register,
     handleSubmit,
+    reset,
     formState: { isSubmitting },
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
@@ -54,7 +55,7 @@ export function NewTransactionModal({
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
     const param: NewTransaction = data;
     await createTransaction(param);
-    //reset();
+    reset();
     onRequestClose();
   }
 
