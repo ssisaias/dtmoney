@@ -5,14 +5,20 @@ import {
 } from "../contexts/TransactionsContext";
 import { useMemo } from "react";
 
+interface Summary {
+  income: number;
+  outcome: number;
+  balance: number;
+}
+
 export function useSummary() {
   const { transactions } = useContextSelector(
     TransactionsContext,
     (state) => state
   );
     // useMemo works similar to memo, but it is a hook instead, used to make a function only runs again when a dependecy of that function changes
-  const summary = useMemo(() => {
-    transactions.reduce(
+  const summary = useMemo<Summary>(() => {
+    return transactions.reduce(
       (acc, transaction: Transaction) => {
         if (transaction.type === "income") {
           acc.income += transaction.price;
