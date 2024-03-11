@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { api } from "../lib/axios";
-import { createContext } from 'use-context-selector';
+import { createContext } from "use-context-selector";
 
 export interface Transaction {
   id: number;
@@ -33,7 +33,7 @@ interface TransactionsProviderProps {
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  async function fetchTransactions(query?: string) {
+  const fetchTransactions = useCallback(async (query?: string) => {
     const response = api.get(`/transactions`, {
       params: {
         _sort: "createdAt",
@@ -43,9 +43,11 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
     });
     const { data } = await response;
     setTransactions(data);
-  }
+  }, []);
 
-  async function createTransaction(transaction: NewTransaction) {
+  //The useCallback hook is used to prevent the function from being recreated every time the component is rendered
+  // it has a dependency array as the second argument, which means that the function will only be recreated if the dependencies change
+  const createTransaction = useCallback(async (transaction: NewTransaction) => {
     const { description, price, category, type } = transaction;
     const createdAt = new Date();
     const response = await api.post("/transactions", {
@@ -56,7 +58,7 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
       createdAt,
     });
     setTransactions((state) => [response.data, ...state]);
-  }
+  }, []);
 
   useEffect(() => {
     fetchTransactions();
