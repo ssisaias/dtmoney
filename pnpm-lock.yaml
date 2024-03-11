@@ -29,9 +29,15 @@ dependencies:
   react-hook-form:
     specifier: ^7.51.0
     version: 7.51.0(react@18.2.0)
+  scheduler:
+    specifier: ^0.23.0
+    version: 0.23.0
   styled-components:
     specifier: ^6.1.8
     version: 6.1.8(react-dom@18.2.0)(react@18.2.0)
+  use-context-selector:
+    specifier: ^1.4.4
+    version: 1.4.4(react-dom@18.2.0)(react@18.2.0)(scheduler@0.23.0)
   zod:
     specifier: ^3.22.4
     version: 3.22.4
@@ -3279,6 +3285,24 @@ packages:
       '@types/react': 18.2.48
       react: 18.2.0
       tslib: 2.5.0
+    dev: false
+
+  /use-context-selector@1.4.4(react-dom@18.2.0)(react@18.2.0)(scheduler@0.23.0):
+    resolution: {integrity: sha512-pS790zwGxxe59GoBha3QYOwk8AFGp4DN6DOtH+eoqVmgBBRXVx4IlPDhJmmMiNQAgUaLlP+58aqRC3A4rdaSjg==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '*'
+      react-native: '*'
+      scheduler: '>=0.19.0'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      scheduler: 0.23.0
     dev: false
 
   /use-sidecar@1.1.2(@types/react@18.2.48)(react@18.2.0):
