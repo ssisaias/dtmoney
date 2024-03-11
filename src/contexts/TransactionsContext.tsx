@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { api } from "../lib/axios";
 import { createContext } from "use-context-selector";
+import { v4 as uuidv4 } from "uuid";
 
 export interface Transaction {
   id: number;
@@ -24,6 +25,8 @@ interface TransactionsContextData {
   createTransaction: (transaction: NewTransaction) => Promise<void>;
 }
 
+const useInMemoryTransactions = import.meta.env.VITE_JSON_SERVER === "false";
+
 export const TransactionsContext = createContext({} as TransactionsContextData);
 
 interface TransactionsProviderProps {
@@ -34,15 +37,17 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const fetchTransactions = useCallback(async (query?: string) => {
-    const response = api.get(`/transactions`, {
-      params: {
-        _sort: "createdAt",
-        _order: "desc",
-        q: query,
-      },
-    });
-    const { data } = await response;
-    setTransactions(data);
+    if (!useInMemoryTransactions) {
+      const response = api.get(`/transactions`, {
+        params: {
+          _sort: "createdAt",
+          _order: "desc",
+          q: query,
+        },
+      });
+      const { data } = await response;
+      setTransactions(data);
+    }
   }, []);
 
   //The useCallback hook is used to prevent the function from being recreated every time the component is rendered
@@ -50,14 +55,30 @@ export function TransactionsProvider({ children }: TransactionsProviderProps) {
   const createTransaction = useCallback(async (transaction: NewTransaction) => {
     const { description, price, category, type } = transaction;
     const createdAt = new Date();
-    const response = await api.post("/transactions", {
-      description,
-      price,
-      category,
-      type,
-      createdAt,
-    });
-    setTransactions((state) => [response.data, ...state]);
+    
+    if (!useInMemoryTransactions) {
+      const response = await api.post("/transactions", {
+        description,
+        price,
+        category,
+        type,
+        createdAt,
+      });
+      setTransactions((state) => [response.data, ...state]);
+    } else {
+      const id = uuidv4();
+      setTransactions((state) => [
+        {
+          id,
+          description,
+          price,
+          category,
+          type,
+          createdAt: createdAt.toISOString(),
+        },
+        ...state,
+      ]);
+    }
   }, []);
 
   useEffect(() => {
